@@ -200,6 +200,16 @@
             .timer {
                 font-size: 2.5rem;
             }
+            
+            .version-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .version-option {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
 </head>
 <body>
@@ -242,90 +252,91 @@
     </div>
 
     <script>
-        const timerElement = document.getElementById('timer');
-        const progressElement = document.getElementById('progress');
-        const statusElement = document.getElementById('status');
-        const popup = document.getElementById('popup');
-        const closePopup = document.getElementById('closePopup');
-        const telegramBtn = document.getElementById('telegramBtn');
-        const downloadScreen = document.getElementById('downloadScreen');
-        const versionOptions = document.querySelectorAll('.version-option');
-        
-        let timeLeft = 15;
-        let timer;
-        let downloadUrl = '';
-        
-        // Version URLs
-        const versionUrls = {
-            regular: 'https://drive.google.com/file/d/1uM6jhIMQpjbtJiWto3ntyOWNcMyi_aQp/view?usp=sharing',
-            nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing'
-        };
-        
-        // Handle version selection
-        versionOptions.forEach(option => {
-            const btn = option.querySelector('.download-btn');
-            const version = option.dataset.version;
+        document.addEventListener('DOMContentLoaded', function() {
+            const timerElement = document.getElementById('timer');
+            const progressElement = document.getElementById('progress');
+            const statusElement = document.getElementById('status');
+            const popup = document.getElementById('popup');
+            const closePopup = document.getElementById('closePopup');
+            const telegramBtn = document.getElementById('telegramBtn');
+            const downloadScreen = document.getElementById('downloadScreen');
+            const versionOptions = document.querySelectorAll('.version-option');
             
-            btn.addEventListener('click', () => {
-                // Show download screen
-                document.querySelector('.version-selector').style.display = 'none';
-                downloadScreen.style.display = 'block';
+            let timeLeft = 15;
+            let timer;
+            let downloadUrl = '';
+            
+            // Version URLs
+            const versionUrls = {
+                regular: 'https://drive.google.com/file/d/1uM6jhIMQpjbtJiWto3ntyOWNcMyi_aQp/view?usp=sharing',
+                nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing'
+            };
+            
+            // Handle version selection
+            versionOptions.forEach(option => {
+                const btn = option.querySelector('.download-btn');
+                const version = option.dataset.version;
                 
-                // Set download URL based on version
-                downloadUrl = versionUrls[version];
-                
-                // Start countdown
-                startDownloadCountdown();
-                
-                // Show popup after 5 seconds
-                setTimeout(() => {
-                    popup.classList.add('show');
-                }, 5000);
+                btn.addEventListener('click', () => {
+                    // Show download screen
+                    document.querySelector('.version-selector').style.display = 'none';
+                    downloadScreen.style.display = 'block';
+                    
+                    // Set download URL based on version
+                    downloadUrl = versionUrls[version];
+                    
+                    // Start countdown
+                    startDownloadCountdown();
+                    
+                    // Show popup after 5 seconds
+                    setTimeout(() => {
+                        popup.classList.add('show');
+                    }, 5000);
+                });
             });
-        });
-        
-        // Close popup
-        closePopup.addEventListener('click', () => {
-            popup.classList.remove('show');
-        });
-        
-        // Telegram button click
-        telegramBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            popup.classList.add('show');
-        });
-        
-        function startDownloadCountdown() {
-            // Reset timer
-            timeLeft = 15;
-            timerElement.textContent = timeLeft;
-            progressElement.style.width = '0%';
-            statusElement.textContent = 'Пожалуйста, подождите...';
-            statusElement.style.color = '#ffffff';
             
-            // Clear any existing timer
-            if (timer) clearInterval(timer);
+            // Close popup
+            closePopup.addEventListener('click', () => {
+                popup.classList.remove('show');
+            });
             
-            // Update timer every second
-            timer = setInterval(() => {
-                timeLeft--;
+            // Telegram button click
+            telegramBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                popup.classList.add('show');
+            });
+            
+            function startDownloadCountdown() {
+                // Reset timer
+                timeLeft = 15;
                 timerElement.textContent = timeLeft;
+                progressElement.style.width = '0%';
+                statusElement.textContent = 'Пожалуйста, подождите...';
+                statusElement.style.color = '#ffffff';
                 
-                // Update progress bar
-                const progress = ((15 - timeLeft) / 15) * 100;
-                progressElement.style.width = `${progress}%`;
+                // Clear any existing timer
+                if (timer) clearInterval(timer);
                 
-                if (timeLeft <= 5) {
-                    statusElement.textContent = 'Подготовка к скачиванию...';
-                    statusElement.style.color = '#ff6b6b';
-                }
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    window.location.href = downloadUrl;
-                }
-            }, 1000);
-        }
+                // Update timer every second
+                timer = setInterval(() => {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                    
+                    // Update progress bar
+                    const progress = ((15 - timeLeft) / 15) * 100;
+                    progressElement.style.width = `${progress}%`;
+                    
+                    if (timeLeft <= 5) {
+                        statusElement.textContent = 'Подготовка к скачиванию...';
+                        statusElement.style.color = '#ff6b6b';
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        window.location.href = downloadUrl;
+                    }
+                }, 1000);
+            }
     </script>
 </body>
 </html>
