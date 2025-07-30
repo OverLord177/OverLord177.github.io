@@ -617,46 +617,24 @@
         // Set initial theme
         setTheme(currentTheme);
 
-        // Show Notification
-        function showNotification(message, isError = false) {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notificationText.textContent = message;
-            notification.className = 'notification' + (isError ? ' error' : '');
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
+            
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
 
         // Check mobile view
         function checkMobileView() {
             if (window.innerWidth <= 768) {
-                mobileMenuBtn.style.display = 'block';
-                navLinks.style.display = 'none';
+                if (mobileMenuBtn) mobileMenuBtn.style.display = 'block';
+                if (navLinks) navLinks.style.display = 'none';
             } else {
-                mobileMenuBtn.style.display = 'none';
-                navLinks.style.display = 'flex';
+                if (mobileMenuBtn) mobileMenuBtn.style.display = 'none';
+                if (navLinks) navLinks.style.display = 'flex';
             }
         }
 
@@ -666,57 +644,60 @@
         // Loading Screen
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.classList.add('hidden');
+            if (loader) {
                 setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500);
-            }, 1000);
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500);
+                }, 1000);
+            }
         });
-        // Анимация частиц
+
+        // Particle animation
         document.addEventListener('DOMContentLoaded', function() {
             const particles = document.getElementById('particles');
-            const particleCount = 50;
+            if (!particles) return;
             
-            for (let i = 0; i < particleCount; i++) {
-                createParticle();
-            }
+            const particleCount = 50;
             
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 
-                // Случайные размеры и позиция
                 const size = Math.random() * 3 + 1;
                 const posX = Math.random() * 100;
                 const posY = Math.random() * 100;
                 const duration = Math.random() * 10 + 10;
                 const delay = Math.random() * -20;
                 
-                // Применяем стили
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.opacity = Math.random() * 0.5 + 0.1;
-                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+            // Применяем стили
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
                 
-                particles.appendChild(particle);
-            }
+            particles.appendChild(particle);
+        }
             
-            // Анимация при наведении на кнопки
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                button.addEventListener('mousemove', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+        // Анимация при наведении на кнопки
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
                     
-                    this.style.setProperty('--x', `${x}px`);
-                    this.style.setProperty('--y', `${y}px`);
-                });
+                this.style.setProperty('--x', `${x}px`);
+                this.style.setProperty('--y', `${y}px`);
             });
         });
-    </script>
+    });
+
+    // Initialize theme
+
+</script>
 </body>
 </html>
