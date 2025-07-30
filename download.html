@@ -220,51 +220,24 @@
             <div class="version-option" data-version="regular">
                 <h3>Обычная версия</h3>
                 <p>Рекомендуется для большинства пользователей</p>
-                <button class="btn download-btn" data-version="regular">Скачать</button>
+                <button class="btn download-btn" data-version="regular">Скачать обычную версию</button>
             </div>
             
             <div class="version-option" data-version="nodpi">
                 <h3>NoDPI версия</h3>
                 <p>Для пользователей с нестандартным разрешением экрана</p>
-                <button class="btn download-btn" data-version="nodpi">Скачать</button>
+                <button class="btn download-btn" data-version="nodpi">Скачать NoDPI версию</button>
             </div>
         </div>
         
-        <div class="download-screen" id="downloadScreen">
-            <h2>Скачивание начнётся через</h2>
-            <div class="timer" id="timer">15</div>
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            <p class="status" id="status">Пожалуйста, подождите...</p>
-            
-            <div class="popup" id="popup">
-                <div class="popup-content">
-                    <h3>Подпишитесь на наш Telegram канал!</h3>
-                    <p>Чтобы получать обновления и поддержку</p>
-                    <a href="https://t.me/nonerai" target="_blank" class="btn">Перейти в Telegram</a>
-                    <button class="close-btn" id="closePopup">Закрыть</button>
-                </div>
-            </div>
-            
-            <button class="btn" id="telegramBtn">Подписаться на обновления</button>
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn" style="background: #444; margin-top: 20px;">← Вернуться на главную</a>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const timerElement = document.getElementById('timer');
-            const progressElement = document.getElementById('progress');
-            const statusElement = document.getElementById('status');
-            const popup = document.getElementById('popup');
-            const closePopup = document.getElementById('closePopup');
-            const telegramBtn = document.getElementById('telegramBtn');
-            const downloadScreen = document.getElementById('downloadScreen');
             const versionOptions = document.querySelectorAll('.version-option');
-            
-            let timeLeft = 15;
-            let timer;
-            let downloadUrl = '';
             
             // Version URLs
             const versionUrls = {
@@ -277,66 +250,12 @@
                 const btn = option.querySelector('.download-btn');
                 const version = option.dataset.version;
                 
-                btn.addEventListener('click', () => {
-                    // Show download screen
-                    document.querySelector('.version-selector').style.display = 'none';
-                    downloadScreen.style.display = 'block';
-                    
-                    // Set download URL based on version
-                    downloadUrl = versionUrls[version];
-                    
-                    // Start countdown
-                    startDownloadCountdown();
-                    
-                    // Show popup after 5 seconds
-                    setTimeout(() => {
-                        popup.classList.add('show');
-                    }, 5000);
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Redirect to the selected version
+                    window.location.href = versionUrls[version];
                 });
             });
-            
-            // Close popup
-            closePopup.addEventListener('click', () => {
-                popup.classList.remove('show');
-            });
-            
-            // Telegram button click
-            telegramBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                popup.classList.add('show');
-            });
-            
-            function startDownloadCountdown() {
-                // Reset timer
-                timeLeft = 15;
-                timerElement.textContent = timeLeft;
-                progressElement.style.width = '0%';
-                statusElement.textContent = 'Пожалуйста, подождите...';
-                statusElement.style.color = '#ffffff';
-                
-                // Clear any existing timer
-                if (timer) clearInterval(timer);
-                
-                // Update timer every second
-                timer = setInterval(() => {
-                    timeLeft--;
-                    timerElement.textContent = timeLeft;
-                    
-                    // Update progress bar
-                    const progress = ((15 - timeLeft) / 15) * 100;
-                    progressElement.style.width = `${progress}%`;
-                    
-                    if (timeLeft <= 5) {
-                        statusElement.textContent = 'Подготовка к скачиванию...';
-                        statusElement.style.color = '#ff6b6b';
-                    }
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(timer);
-                        window.location.href = downloadUrl;
-                    }
-                }, 1000);
-            }
     </script>
 </body>
 </html>
