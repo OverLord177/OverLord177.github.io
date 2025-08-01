@@ -54,6 +54,7 @@
         .nav-links {
             display: flex;
             gap: 30px;
+            transition: all 0.3s ease;
         }
 
         .nav-link {
@@ -61,8 +62,9 @@
             text-decoration: none;
             font-weight: 500;
             position: relative;
-            padding: 5px 0;
-            transition: color 0.3s ease;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            display: block;
         }
 
         .nav-link::after {
@@ -91,6 +93,8 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1001;
+            position: relative;
         }
 
         /* Notification */
@@ -463,6 +467,85 @@
                 font-size: 1.2rem;
             }
         }
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+            
+            .nav-container.scrolled {
+                padding: 10px 20px;
+            }
+            
+            .nav-menu {
+                padding: 0 10px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(18, 18, 18, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 80px 20px 40px;
+                transition: all 0.4s ease;
+                z-index: 1000;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-logo {
+                font-size: 1.5rem;
+            }
+            
+            .theme-toggle {
+                top: 25px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+                max-width: 90%;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .nav-container {
+                padding: 10px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -472,13 +555,13 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="nav-container" id="navbar">
+    <nav class="nav-container">
         <div class="nav-menu">
-            <a href="#" class="nav-logo">NONERAI</a>
-            <div class="nav-links">
-                <a href="#features" class="nav-link">Возможности</a>
+            <a href="#" class="nav-logo">Nonerai</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#features" class="nav-link">Особенности</a>
                 <a href="#download" class="nav-link">Скачать</a>
-                <a href="#community" class="nav-link">Сообщество</a>
+                <a href="#contact" class="nav-link">Контакты</a>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
@@ -570,14 +653,85 @@
     </div>
 
     <script>
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+        // Initialize mobile menu functionality
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (!mobileMenuBtn || !navLinks) return;
+            
+            // Toggle mobile menu
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+            });
+            
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                    document.body.style.overflow = '';
                 });
             });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && !navLinks.contains(e.target) && e.target !== mobileMenuBtn) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close menu on window resize if it becomes desktop view
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+        
+        // Initialize smooth scroll
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        
+                        // Close mobile menu if open
+                        if (window.innerWidth <= 768) {
+                            const navLinks = document.getElementById('navLinks');
+                            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                            if (navLinks && mobileMenuBtn) {
+                                navLinks.classList.remove('active');
+                                mobileMenuBtn.textContent = '☰';
+                                document.body.style.overflow = '';
+                            }
+                        }
+                        
+                        // Smooth scroll to target
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initialize all functionality when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileMenu();
+            initSmoothScroll();
         });
 
         // Scroll to Top Button
