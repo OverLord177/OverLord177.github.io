@@ -219,6 +219,37 @@
             color: #ff6b6b;
         }
         /* Features Section */
+        /* Features Carousel */
+        .features-carousel {
+            position: relative;
+            max-width: 100%;
+            margin: 40px auto;
+            overflow: hidden;
+        }
+        
+        .features {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+        }
+        
+        .features::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+        }
+        
+        .feature-card {
+            flex: 0 0 auto;
+            width: 280px;
+            scroll-snap-align: start;
+        }
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -601,41 +632,46 @@
         
         <h2 class="section-title">Что такое модификация?</h2>
         
-        <div class="features" id="features">
-            <div class="feature-card">
-                <h3>✨ Уникальность</h3>
-                <p>Единственная и первая самописная модификация игры с 2022 года</p>
+        <div class="features-carousel">
+            <button class="carousel-arrow prev-feature">❮</button>
+            <div class="features" id="features">
+                <div class="feature-card">
+                    <h3>✨ Уникальность</h3>
+                    <p>Единственная и первая самописная модификация игры с 2022 года</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>⚡ Оптимизация</h3>
+                    <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🛡️ Безопасность</h3>
+                    <p>Благодаря отключению аналитики и прочих ресурсоёмких процессов, мы повысили не только стабильность нашей модификации, но и безопасность</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🧹 Чистая среда</h3>
+                    <p>Блокировка рекламы и полностью бесплатное использование</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔄 Второе дыхание</h3>
+                    <p>Скучная игра может превратиться в совсем иной проект, благодаря возможности изменения файлов игры</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📦 Модули</h3>
+                    <p>Загружайте совместимые .so файлы прямо в модификации без перепаковки APK</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🤝 Уважение</h3>
+                    <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
+                </div>
             </div>
-            
-            <div class="feature-card">
-                <h3>⚡ Оптимизация</h3>
-                <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🛡️ Безопасность</h3>
-                <p>Благодаря отключению аналитики и прочих ресурсоёмких процессов, мы повысили не только стабильность нашей модификации, но и безопасность</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🧹 Чистая среда</h3>
-                <p>Блокировка рекламы и полностью бесплатное использование</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🔄 Второе дыхание</h3>
-                <p>Скучная игра может превратиться в совсем иной проект, благодаря возможности изменения файлов игры</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>📦 Модули</h3>
-                <p>Загружайте совместимые .so файлы прямо в модификации без перепаковки APK</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🤝 Уважение</h3>
-                <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
-            </div>
+            <button class="carousel-arrow next-feature">❯</button>
+            <div class="carousel-dots" id="featureDots"></div>
         </div>
         
         <div class="social-links" id="community">
@@ -728,10 +764,129 @@
             });
         }
         
+        // Features Carousel
+        function initFeaturesCarousel() {
+            const featuresCarousel = document.querySelector('.features');
+            const featureCards = document.querySelectorAll('.feature-card');
+            const prevBtn = document.querySelector('.prev-feature');
+            const nextBtn = document.querySelector('.next-feature');
+            const dotsContainer = document.getElementById('featureDots');
+            
+            if (!featuresCarousel || !prevBtn || !nextBtn) return;
+            
+            let currentIndex = 0;
+            const cardWidth = 300; // Width of each feature card + gap
+            const cardsPerView = Math.min(3, Math.floor(window.innerWidth / cardWidth));
+            
+            // Create dots for navigation
+            featureCards.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            // Update carousel position
+            function updateCarousel() {
+                const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                currentIndex = Math.min(Math.max(0, currentIndex), maxIndex);
+                
+                featuresCarousel.scrollTo({
+                    left: currentIndex * (cardWidth + 20), // 20px gap
+                    behavior: 'smooth'
+                });
+                
+                // Update active dot
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+                
+                // Toggle arrow visibility
+                prevBtn.style.display = currentIndex === 0 ? 'none' : 'flex';
+                nextBtn.style.display = currentIndex >= maxIndex ? 'none' : 'flex';
+            }
+            
+            // Go to specific slide
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+            }
+            
+            // Event listeners for navigation
+            prevBtn.addEventListener('click', () => {
+                currentIndex = Math.max(0, currentIndex - 1);
+                updateCarousel();
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                currentIndex = Math.min(currentIndex + 1, maxIndex);
+                updateCarousel();
+            });
+            
+            // Handle keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    currentIndex = Math.max(0, currentIndex - 1);
+                    updateCarousel();
+                } else if (e.key === 'ArrowRight') {
+                    const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                    currentIndex = Math.min(currentIndex + 1, maxIndex);
+                    updateCarousel();
+                }
+            });
+            
+            // Handle swipe on touch devices
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            featuresCarousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            featuresCarousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDifference = touchStartX - touchEndX;
+                
+                if (Math.abs(swipeDifference) > swipeThreshold) {
+                    if (swipeDifference > 0) {
+                        // Swipe left
+                        const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                        currentIndex = Math.min(currentIndex + 1, maxIndex);
+                    } else {
+                        // Swipe right
+                        currentIndex = Math.max(0, currentIndex - 1);
+                    }
+                    updateCarousel();
+                }
+            }
+            
+            // Initialize carousel
+            updateCarousel();
+            
+            // Update on window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    updateCarousel();
+                }, 250);
+            });
+        }
+        
         // Initialize all functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             initMobileMenu();
             initSmoothScroll();
+            initFeaturesCarousel();
         });
 
         // Scroll to Top Button
