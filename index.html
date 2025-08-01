@@ -225,29 +225,100 @@
             max-width: 100%;
             margin: 40px auto;
             overflow: hidden;
+            padding: 0 50px; /* Add padding for arrows */
         }
         
         .features {
             display: flex;
-            transition: transform 0.5s ease;
             gap: 20px;
-            padding: 10px 0;
+            padding: 20px 0;
             scroll-behavior: smooth;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none; /* Hide scrollbar for Firefox */
             -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+            scroll-padding: 0 20px;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-stop: always;
         }
         
         .features::-webkit-scrollbar {
             display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+            height: 0;
         }
         
         .feature-card {
-            flex: 0 0 auto;
-            width: 280px;
+            flex: 0 0 280px;
             scroll-snap-align: start;
+            scroll-snap-stop: always;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .carousel-arrow:hover {
+            background: rgba(255, 107, 107, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-arrow.prev-feature {
+            left: 0;
+        }
+        
+        .carousel-arrow.next-feature {
+            right: 0;
+        }
+        
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-dot.active {
+            background: #ff6b6b;
+            transform: scale(1.3);
         }
 
         .features {
@@ -666,6 +737,11 @@
                 </div>
                 
                 <div class="feature-card">
+                    <h3>🎯 Точные хитбоксы</h3>
+                    <p>В нашем лаунчере - точные хитбоксы, в то время как в браузере игроки получают в туза!</p>
+                </div>
+                
+                <div class="feature-card">
                     <h3>🤝 Уважение</h3>
                     <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
                 </div>
@@ -775,38 +851,63 @@
             if (!featuresCarousel || !prevBtn || !nextBtn) return;
             
             let currentIndex = 0;
-            const cardWidth = 300; // Width of each feature card + gap
-            const cardsPerView = Math.min(3, Math.floor(window.innerWidth / cardWidth));
+            let isScrolling = false;
+            let scrollTimeout;
+            
+            // Calculate how many cards are visible based on viewport width
+            function getVisibleCardsCount() {
+                if (window.innerWidth < 768) return 1;
+                if (window.innerWidth < 1200) return 2;
+                return 3;
+            }
+            
+            let visibleCards = getVisibleCardsCount();
             
             // Create dots for navigation
-            featureCards.forEach((_, index) => {
-                const dot = document.createElement('button');
-                dot.classList.add('carousel-dot');
-                if (index === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => goToSlide(index));
-                dotsContainer.appendChild(dot);
-            });
-            
-            const dots = document.querySelectorAll('.carousel-dot');
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                const totalDots = Math.ceil(featureCards.length / visibleCards);
+                
+                for (let i = 0; i < totalDots; i++) {
+                    const dot = document.createElement('button');
+                    dot.classList.add('carousel-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => goToSlide(i * visibleCards));
+                    dotsContainer.appendChild(dot);
+                }
+            }
             
             // Update carousel position
             function updateCarousel() {
-                const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                if (isScrolling) return;
+                
+                isScrolling = true;
+                const card = featureCards[0];
+                const cardWidth = card.offsetWidth + 20; // 20px gap
+                const maxIndex = Math.max(0, featureCards.length - visibleCards);
+                
                 currentIndex = Math.min(Math.max(0, currentIndex), maxIndex);
                 
                 featuresCarousel.scrollTo({
-                    left: currentIndex * (cardWidth + 20), // 20px gap
+                    left: currentIndex * cardWidth,
                     behavior: 'smooth'
                 });
                 
                 // Update active dot
+                const dots = document.querySelectorAll('.carousel-dot');
+                const activeDotIndex = Math.floor(currentIndex / visibleCards);
                 dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentIndex);
+                    dot.classList.toggle('active', index === activeDotIndex);
                 });
                 
                 // Toggle arrow visibility
                 prevBtn.style.display = currentIndex === 0 ? 'none' : 'flex';
                 nextBtn.style.display = currentIndex >= maxIndex ? 'none' : 'flex';
+                
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    isScrolling = false;
+                }, 500);
             }
             
             // Go to specific slide
@@ -817,23 +918,25 @@
             
             // Event listeners for navigation
             prevBtn.addEventListener('click', () => {
-                currentIndex = Math.max(0, currentIndex - 1);
+                currentIndex = Math.max(0, currentIndex - visibleCards);
                 updateCarousel();
             });
             
             nextBtn.addEventListener('click', () => {
-                const maxIndex = Math.max(0, featureCards.length - cardsPerView);
-                currentIndex = Math.min(currentIndex + 1, maxIndex);
+                const maxIndex = Math.max(0, featureCards.length - visibleCards);
+                currentIndex = Math.min(currentIndex + visibleCards, maxIndex);
                 updateCarousel();
             });
             
             // Handle keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
                     currentIndex = Math.max(0, currentIndex - 1);
                     updateCarousel();
                 } else if (e.key === 'ArrowRight') {
-                    const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                    e.preventDefault();
+                    const maxIndex = Math.max(0, featureCards.length - visibleCards);
                     currentIndex = Math.min(currentIndex + 1, maxIndex);
                     updateCarousel();
                 }
@@ -842,9 +945,11 @@
             // Handle swipe on touch devices
             let touchStartX = 0;
             let touchEndX = 0;
+            let touchStartTime = 0;
             
             featuresCarousel.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
+                touchStartTime = Date.now();
             }, { passive: true });
             
             featuresCarousel.addEventListener('touchend', (e) => {
@@ -854,22 +959,41 @@
             
             function handleSwipe() {
                 const swipeThreshold = 50;
+                const timeThreshold = 300; // ms
+                const swipeTime = Date.now() - touchStartTime;
                 const swipeDifference = touchStartX - touchEndX;
                 
-                if (Math.abs(swipeDifference) > swipeThreshold) {
+                if (Math.abs(swipeDifference) > swipeThreshold && swipeTime < timeThreshold) {
                     if (swipeDifference > 0) {
-                        // Swipe left
-                        const maxIndex = Math.max(0, featureCards.length - cardsPerView);
+                        // Swipe left - go to next
+                        const maxIndex = Math.max(0, featureCards.length - visibleCards);
                         currentIndex = Math.min(currentIndex + 1, maxIndex);
                     } else {
-                        // Swipe right
+                        // Swipe right - go to previous
                         currentIndex = Math.max(0, currentIndex - 1);
                     }
                     updateCarousel();
                 }
             }
             
+            // Handle scroll events for better UX
+            featuresCarousel.addEventListener('scroll', () => {
+                if (!isScrolling) {
+                    const card = featureCards[0];
+                    const cardWidth = card.offsetWidth + 20; // 20px gap
+                    currentIndex = Math.round(featuresCarousel.scrollLeft / cardWidth);
+                    
+                    // Update active dot
+                    const dots = document.querySelectorAll('.carousel-dot');
+                    const activeDotIndex = Math.floor(currentIndex / visibleCards);
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === activeDotIndex);
+                    });
+                }
+            });
+            
             // Initialize carousel
+            createDots();
             updateCarousel();
             
             // Update on window resize
@@ -877,6 +1001,11 @@
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
+                    const newVisibleCards = getVisibleCardsCount();
+                    if (newVisibleCards !== visibleCards) {
+                        visibleCards = newVisibleCards;
+                        createDots();
+                    }
                     updateCarousel();
                 }, 250);
             });
