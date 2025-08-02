@@ -1,10 +1,1 @@
-# Клонируй репозиторий (если не сделано)
-git clone https://github.com/OverLord177/OverLord177.github.io.git
-cd OverLord177.github.io
 
-# Удали файл
-git rm "фон/фон.png"
-
-# Зафиксируй и отправь изменения
-git commit -m "Удалил фон.png"
-git push
