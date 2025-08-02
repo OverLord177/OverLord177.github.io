@@ -402,7 +402,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('фон/фон.jpg');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('фон/фон.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -691,28 +691,6 @@
             <h1>NONERAI</h1>
         </div>
         
-        <div class="description">
-            <h2>Официальный лаунчер Nonerai</h2>
-            <p>Скачайте последнюю версию лаунчера для доступа к игре</p>
-        </div>
-        
-        <a href="download.html" class="btn download-btn" id="download">
-            <i>⬇️</i> Выбрать версию
-        </a>
-        <p style="margin-top: 10px; color: rgba(255, 255, 255, 0.7);">Доступны обычная, NoDPI и HiSpace версии</p>
-        
-        <h2 class="section-title">Что такое модификация?</h2>
-        
-        <div class="features-carousel">
-            <button class="carousel-arrow prev-feature">❮</button>
-            <div class="features" id="features">
-                <div class="feature-card">
-                    <h3>✨ Уникальность</h3>
-                    <p>Единственная и первая самописная модификация игры с 2022 года</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>⚡ Оптимизация</h3>
                     <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
                 </div>
                 
@@ -746,7 +724,6 @@
                     <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
                 </div>
             </div>
-            <button class="carousel-arrow next-feature">❯</button>
             <div class="carousel-dots" id="featureDots"></div>
         </div>
         
@@ -844,11 +821,9 @@
         function initFeaturesCarousel() {
             const featuresCarousel = document.querySelector('.features');
             const featureCards = document.querySelectorAll('.feature-card');
-            const prevBtn = document.querySelector('.prev-feature');
-            const nextBtn = document.querySelector('.next-feature');
             const dotsContainer = document.getElementById('featureDots');
             
-            if (!featuresCarousel || !prevBtn || !nextBtn) return;
+            if (!featuresCarousel) return;
             
             let currentIndex = 0;
             let isScrolling = false;
@@ -900,9 +875,7 @@
                     dot.classList.toggle('active', index === activeDotIndex);
                 });
                 
-                // Toggle arrow visibility
-                prevBtn.style.display = currentIndex === 0 ? 'none' : 'flex';
-                nextBtn.style.display = currentIndex >= maxIndex ? 'none' : 'flex';
+                // Arrow visibility removed
                 
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(() => {
@@ -916,17 +889,12 @@
                 updateCarousel();
             }
             
-            // Event listeners for navigation
-            prevBtn.addEventListener('click', () => {
-                currentIndex = Math.max(0, currentIndex - visibleCards);
-                updateCarousel();
-            });
-            
-            nextBtn.addEventListener('click', () => {
+            // Auto-advance carousel
+            setInterval(() => {
                 const maxIndex = Math.max(0, featureCards.length - visibleCards);
-                currentIndex = Math.min(currentIndex + visibleCards, maxIndex);
+                currentIndex = (currentIndex + visibleCards) % (maxIndex + 1);
                 updateCarousel();
-            });
+            }, 5000); // Auto-advance every 5 seconds
             
             // Handle keyboard navigation
             document.addEventListener('keydown', (e) => {
