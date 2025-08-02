@@ -65,6 +65,17 @@
             justify-content: center;
         }
         
+        .wait-message {
+            display: none;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        
         .version-option {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -250,6 +261,12 @@
                 <p>Для пользователей с нестандартным разрешением экрана</p>
                 <button class="btn download-btn" data-version="nodpi">Скачать NoDPI версию</button>
             </div>
+            
+            <div class="version-option" data-version="hispace">
+                <h3>HiSpace версия</h3>
+                <p>Специальная версия с улучшенной совместимостью</p>
+                <button class="btn download-btn" data-version="hispace">Скачать HiSpace версию</button>
+            </div>
         </div>
         
         <div style="margin-top: 30px;">
@@ -264,18 +281,51 @@
             // Version URLs
             const versionUrls = {
                 regular: 'https://drive.google.com/file/d/1uM6jhIMQpjbtJiWto3ntyOWNcMyi_aQp/view?usp=sharing',
-                nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing'
+                nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing',
+                hispace: 'https://drive.google.com/file/d/1zkKo6pi_iL5gx1Yts-zAeYv9RPmDhhOS/view?usp=sharing'
             };
             
             // Handle version selection
-            versionOptions.forEach(option => {
+            document.querySelectorAll('.version-option').forEach(option => {
                 const btn = option.querySelector('.download-btn');
                 const version = option.dataset.version;
                 
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    // Redirect to the selected version
-                    window.location.href = versionUrls[version];
+                    
+                    // Show wait message
+                    const waitMessage = document.createElement('div');
+                    waitMessage.className = 'wait-message';
+                    waitMessage.innerHTML = `
+                        <p>Пожалуйста, подождите 10 секунд, идет подготовка файла...</p>
+                        <div id="countdown" style="font-size: 1.2em; font-weight: bold; margin-top: 10px;">10</div>
+                    `;
+                    
+                    // Insert after the version selector
+                    const versionSelector = document.querySelector('.version-selector');
+                    versionSelector.parentNode.insertBefore(waitMessage, versionSelector.nextSibling);
+                    
+                    // Disable all download buttons
+                    document.querySelectorAll('.download-btn').forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.7';
+                        btn.style.cursor = 'not-allowed';
+                    });
+                    
+                    // Start countdown
+                    let secondsLeft = 10;
+                    const countdownElement = document.getElementById('countdown');
+                    
+                    const countdown = setInterval(() => {
+                        secondsLeft--;
+                        countdownElement.textContent = secondsLeft;
+                        
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdown);
+                            // Redirect to the selected version
+                            window.location.href = versionUrls[version];
+                        }
+                    }, 1000);
                 });
             });
         });
