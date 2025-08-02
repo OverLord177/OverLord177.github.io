@@ -296,9 +296,22 @@
                     // Show wait message
                     const waitMessage = document.createElement('div');
                     waitMessage.className = 'wait-message';
+                    waitMessage.style.display = 'block';
+                    waitMessage.style.background = 'rgba(255, 107, 107, 0.2)';
+                    waitMessage.style.padding = '20px';
+                    waitMessage.style.borderRadius = '10px';
+                    waitMessage.style.textAlign = 'center';
+                    waitMessage.style.margin = '20px auto';
+                    waitMessage.style.maxWidth = '500px';
                     waitMessage.innerHTML = `
-                        <p>Пожалуйста, подождите 10 секунд, идет подготовка файла...</p>
-                        <div id="countdown" style="font-size: 1.2em; font-weight: bold; margin-top: 10px;">10</div>
+                        <p style="font-size: 1.2em; margin-bottom: 15px;">⏳ Подготовка к загрузке...</p>
+                        <div style="font-size: 2em; font-weight: bold; color: #ff6b6b; margin: 15px 0;">
+                            <span id="countdown">10</span> сек.
+                        </div>
+                        <p style="color: rgba(255,255,255,0.7);">Пожалуйста, подождите, файл готовится к загрузке</p>
+                        <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; margin-top: 15px; overflow: hidden;">
+                            <div id="progressBar" style="height: 100%; width: 0%; background: #ff6b6b; transition: width 1s linear;"></div>
+                        </div>
                     `;
                     
                     // Insert after the version selector
@@ -316,9 +329,14 @@
                     let secondsLeft = 10;
                     const countdownElement = document.getElementById('countdown');
                     
+                    const progressBar = document.getElementById('progressBar');
+                    const totalTime = 10; // 10 seconds total
+                    
                     const countdown = setInterval(() => {
                         secondsLeft--;
+                        const progress = ((totalTime - secondsLeft) / totalTime) * 100;
                         countdownElement.textContent = secondsLeft;
+                        progressBar.style.width = `${progress}%`;
                         
                         if (secondsLeft <= 0) {
                             clearInterval(countdown);
