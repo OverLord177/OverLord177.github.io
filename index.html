@@ -661,9 +661,9 @@
         <div class="nav-menu">
             <a href="#" class="nav-logo">Nonerai</a>
             <div class="nav-links" id="navLinks">
-                <a href="#features" class="nav-link">Особенности</a>
-                <a href="#download" class="nav-link">Скачать</a>
-                <a href="#contact" class="nav-link">Контакты</a>
+                <a href="#features" class="nav-link" data-scroll>Особенности</a>
+                <a href="#download-section" class="nav-link" data-scroll>Скачать</a>
+                <a href="https://t.me/nonerai" target="_blank" class="nav-link">Контакты</a>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
@@ -694,6 +694,13 @@
         <div class="description">
             <p>Официальный лаунчер Nonerai</p>
             <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
+            
+            <div class="download-section" id="download-section" style="margin-top: 40px;">
+                <a href="download.html" class="btn download-btn" style="background: #ff6b6b; color: white; text-decoration: none; padding: 15px 30px; border-radius: 50px; font-weight: 600; font-size: 1.1em; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);">
+                    <i>⬇️</i> Выбрать версию
+                </a>
+                <p style="margin-top: 15px; color: rgba(255, 255, 255, 0.7); font-size: 0.9em;">Доступны обычная, NoDPI и HiSpace версии</p>
+            </div>
         </div>
         
         <div class="features-carousel">
@@ -800,7 +807,7 @@
         
         // Initialize smooth scroll
         function initSmoothScroll() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            document.querySelectorAll('a[data-scroll]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const targetId = this.getAttribute('href');
                     if (targetId === '#') return;
