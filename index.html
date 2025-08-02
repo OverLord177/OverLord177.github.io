@@ -66,6 +66,13 @@
             transition: all 0.3s ease;
             display: block;
         }
+        
+        .nav-links .download-btn {
+            margin-left: 15px;
+            padding: 8px 20px !important;
+            font-size: 0.9em !important;
+            white-space: nowrap;
+        }
 
         .nav-link::after {
             content: '';
@@ -590,18 +597,23 @@
             .nav-links {
                 position: fixed;
                 top: 0;
-                right: -100%;
-                width: 80%;
-                max-width: 300px;
+                right: -300px;
+                width: 250px;
                 height: 100vh;
-                background: rgba(18, 18, 18, 0.98);
-                backdrop-filter: blur(10px);
+                background: #121212;
                 flex-direction: column;
-                align-items: center;
-                justify-content: center;
+                align-items: flex-start;
                 padding: 80px 20px 40px;
                 transition: all 0.4s ease;
                 z-index: 1000;
+                overflow-y: auto;
+            }
+            
+            .nav-links .download-btn {
+                margin: 15px 0 0 0 !important;
+                width: 100%;
+                text-align: center;
+                justify-content: center;
             }
             
             .nav-links.active {
@@ -661,9 +673,11 @@
         <div class="nav-menu">
             <a href="#" class="nav-logo">Nonerai</a>
             <div class="nav-links" id="navLinks">
-                <a href="#features" class="nav-link" data-scroll>Особенности</a>
-                <a href="#download-section" class="nav-link" data-scroll>Скачать</a>
-                <a href="https://t.me/nonerai" target="_blank" class="nav-link">Контакты</a>
+                <a href="#features" class="nav-link">Особенности</a>
+                <a href="download.html" class="btn download-btn" style="background: #ff6b6b; color: white; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9em; margin-left: 15px;">
+                    <i>⬇️</i> Выбрать версию
+                </a>
+                <a href="#contact" class="nav-link">Контакты</a>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
@@ -694,13 +708,6 @@
         <div class="description">
             <p>Официальный лаунчер Nonerai</p>
             <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
-            
-            <div class="download-section" id="download-section" style="margin-top: 40px;">
-                <a href="download.html" class="btn download-btn" style="background: #ff6b6b; color: white; text-decoration: none; padding: 15px 30px; border-radius: 50px; font-weight: 600; font-size: 1.1em; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);">
-                    <i>⬇️</i> Выбрать версию
-                </a>
-                <p style="margin-top: 15px; color: rgba(255, 255, 255, 0.7); font-size: 0.9em;">Доступны обычная, NoDPI и HiSpace версии</p>
-            </div>
         </div>
         
         <div class="features-carousel">
