@@ -54,7 +54,6 @@
         .nav-links {
             display: flex;
             gap: 30px;
-            transition: all 0.3s ease;
         }
 
         .nav-link {
@@ -62,16 +61,8 @@
             text-decoration: none;
             font-weight: 500;
             position: relative;
-            padding: 10px 0;
-            transition: all 0.3s ease;
-            display: block;
-        }
-        
-        .nav-links .download-btn {
-            margin-left: 15px;
-            padding: 8px 20px !important;
-            font-size: 0.9em !important;
-            white-space: nowrap;
+            padding: 5px 0;
+            transition: color 0.3s ease;
         }
 
         .nav-link::after {
@@ -100,8 +91,6 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            z-index: 1001;
-            position: relative;
         }
 
         /* Notification */
@@ -226,52 +215,25 @@
             color: #ff6b6b;
         }
         /* Features Section */
-        /* Features Carousel */
-        .features-carousel {
-            position: relative;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
         }
 
         .feature-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
-            padding: 25px;
-            transition: all 0.3s ease;
+            padding: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            height: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
         }
-        
-        .feature-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.3em;
-            color: #ff6b6b;
-        }
-        
-        .feature-card p {
-            margin: 0;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -334,7 +296,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('фон/фон.png');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('фон/фон.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -501,90 +463,6 @@
                 font-size: 1.2rem;
             }
         }
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .nav-container {
-                padding: 15px 20px;
-            }
-            
-            .nav-container.scrolled {
-                padding: 10px 20px;
-            }
-            
-            .nav-menu {
-                padding: 0 10px;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -300px;
-                width: 250px;
-                height: 100vh;
-                background: #121212;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 80px 20px 40px;
-                transition: all 0.4s ease;
-                z-index: 1000;
-                overflow-y: auto;
-            }
-            
-            .nav-links .download-btn {
-                margin: 15px 0 0 0 !important;
-                width: 100%;
-                text-align: center;
-                justify-content: center;
-            }
-            
-            .nav-links.active {
-                right: 0;
-            }
-            
-            .nav-logo {
-                font-size: 1.5rem;
-            }
-            
-            .theme-toggle {
-                top: 25px;
-                right: 20px;
-                width: 40px;
-                height: 40px;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-                line-height: 1.2;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-                max-width: 90%;
-            }
-            
-            .btn {
-                padding: 12px 25px;
-                font-size: 1rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .nav-container {
-                padding: 10px 15px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -594,15 +472,13 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="nav-container">
+    <nav class="nav-container" id="navbar">
         <div class="nav-menu">
-            <a href="#" class="nav-logo">Nonerai</a>
-            <div class="nav-links" id="navLinks">
-                <a href="#features" class="nav-link">Особенности</a>
-                <a href="download.html" class="btn download-btn" style="background: #ff6b6b; color: white; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9em; margin-left: 15px;">
-                    <i>⬇️</i> Выбрать версию
-                </a>
-                <a href="#contact" class="nav-link">Контакты</a>
+            <a href="#" class="nav-logo">NONERAI</a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Возможности</a>
+                <a href="#download" class="nav-link">Скачать</a>
+                <a href="#community" class="nav-link">Сообщество</a>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
@@ -631,45 +507,52 @@
         </div>
         
         <div class="description">
-            <p>Официальный лаунчер Nonerai</p>
-            <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
+            <h2>Официальный лаунчер Nonerai</h2>
+            <p>Скачайте последнюю версию лаунчера для доступа к игре</p>
         </div>
         
-        <div class="features-carousel">
-            <div class="features" id="features">
-                <div class="feature-card">
-                
-                <div class="feature-card">
-                    <h3>🛡️ Безопасность</h3>
-                    <p>Благодаря отключению аналитики и прочих ресурсоёмких процессов, мы повысили не только стабильность нашей модификации, но и безопасность</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>🧹 Чистая среда</h3>
-                    <p>Блокировка рекламы и полностью бесплатное использование</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>🔄 Второе дыхание</h3>
-                    <p>Скучная игра может превратиться в совсем иной проект, благодаря возможности изменения файлов игры</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>📦 Модули</h3>
-                    <p>Загружайте совместимые .so файлы прямо в модификации без перепаковки APK</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>🎯 Точные хитбоксы</h3>
-                    <p>В нашем лаунчере - точные хитбоксы, в то время как в Нейзере игроки получают в туза!</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>🤝 Уважение</h3>
-                    <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
-                </div>
+        <a href="download.html" class="btn download-btn" id="download">
+            <i>⬇️</i> Выбрать версию
+        </a>
+        <p style="margin-top: 10px; color: rgba(255, 255, 255, 0.7);">Доступны обычная и NoDPI версии</p>
+        
+        <h2 class="section-title">Что такое модификация?</h2>
+        
+        <div class="features" id="features">
+            <div class="feature-card">
+                <h3>✨ Уникальность</h3>
+                <p>Единственная и первая самописная модификация игры с 2022 года</p>
             </div>
-            <div class="carousel-dots" id="featureDots"></div>
+            
+            <div class="feature-card">
+                <h3>⚡ Оптимизация</h3>
+                <p>Оптимизация размера, игровых процессов, а также интернет соединения</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🛡️ Безопасность</h3>
+                <p>Благодаря отключению аналитики и прочих ресурсоёмких процессов, мы повысили не только стабильность нашей модификации, но и безопасность</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🧹 Чистая среда</h3>
+                <p>Блокировка рекламы и полностью бесплатное использование</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🔄 Второе дыхание</h3>
+                <p>Скучная игра может превратиться в совсем иной проект, благодаря возможности изменения файлов игры</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📦 Модули</h3>
+                <p>Загружайте совместимые .so файлы прямо в модификации без перепаковки APK</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🤝 Уважение</h3>
+                <p>Мы уважаем наших подписчиков и прислушиваемся к каждому их мнению</p>
+            </div>
         </div>
         
         <div class="social-links" id="community">
@@ -687,248 +570,14 @@
     </div>
 
     <script>
-        // Initialize mobile menu functionality
-        function initMobileMenu() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (!mobileMenuBtn || !navLinks) return;
-            
-            // Toggle mobile menu
-            mobileMenuBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                navLinks.classList.toggle('active');
-                mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-            });
-            
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.textContent = '☰';
-                    document.body.style.overflow = '';
-                });
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768 && !navLinks.contains(e.target) && e.target !== mobileMenuBtn) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.textContent = '☰';
-                    document.body.style.overflow = '';
-                }
-            });
-            
-            // Close menu on window resize if it becomes desktop view
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768) {
-                    navLinks.classList.remove('active');
-                    mobileMenuBtn.textContent = '☰';
-                    document.body.style.overflow = '';
-                }
-            });
-        }
-        
-        // Initialize smooth scroll
-        function initSmoothScroll() {
-            document.querySelectorAll('a[data-scroll]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        e.preventDefault();
-                        
-                        // Close mobile menu if open
-                        if (window.innerWidth <= 768) {
-                            const navLinks = document.getElementById('navLinks');
-                            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-                            if (navLinks && mobileMenuBtn) {
-                                navLinks.classList.remove('active');
-                                mobileMenuBtn.textContent = '☰';
-                                document.body.style.overflow = '';
-                            }
-                        }
-                        
-                        // Smooth scroll to target
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        }
-        
-        // Features Carousel
-        function initFeaturesCarousel() {
-            const featuresCarousel = document.querySelector('.features');
-            const featureCards = document.querySelectorAll('.feature-card');
-            const dotsContainer = document.getElementById('featureDots');
-            
-            if (!featuresCarousel) return;
-            
-            let currentIndex = 0;
-            let isScrolling = false;
-            let scrollTimeout;
-            
-            // Calculate how many cards are visible based on viewport width
-            function getVisibleCardsCount() {
-                if (window.innerWidth < 768) return 1;
-                if (window.innerWidth < 1200) return 2;
-                return 3;
-            }
-            
-            let visibleCards = getVisibleCardsCount();
-            
-            // Create dots for navigation
-            function createDots() {
-                dotsContainer.innerHTML = '';
-                const totalDots = Math.ceil(featureCards.length / visibleCards);
-                
-                for (let i = 0; i < totalDots; i++) {
-                    const dot = document.createElement('button');
-                    dot.classList.add('carousel-dot');
-                    if (i === 0) dot.classList.add('active');
-                    dot.addEventListener('click', () => goToSlide(i * visibleCards));
-                    dotsContainer.appendChild(dot);
-                }
-            }
-            
-            // Update carousel position
-            function updateCarousel() {
-                if (isScrolling) return;
-                
-                isScrolling = true;
-                const card = featureCards[0];
-                const cardWidth = card.offsetWidth + 20; // 20px gap
-                const maxIndex = Math.max(0, featureCards.length - visibleCards);
-                
-                currentIndex = Math.min(Math.max(0, currentIndex), maxIndex);
-                
-                featuresCarousel.scrollTo({
-                    left: currentIndex * cardWidth,
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
-                
-                // Update active dot
-                const dots = document.querySelectorAll('.carousel-dot');
-                const activeDotIndex = Math.floor(currentIndex / visibleCards);
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === activeDotIndex);
-                });
-                
-                // Arrow visibility removed
-                
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    isScrolling = false;
-                }, 500);
-            }
-            
-            // Go to specific slide
-            function goToSlide(index) {
-                currentIndex = index;
-                updateCarousel();
-            }
-            
-            // Auto-advance carousel
-            setInterval(() => {
-                const maxIndex = Math.max(0, featureCards.length - visibleCards);
-                currentIndex = (currentIndex + visibleCards) % (maxIndex + 1);
-                updateCarousel();
-            }, 5000); // Auto-advance every 5 seconds
-            
-            // Handle keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    currentIndex = Math.max(0, currentIndex - 1);
-                    updateCarousel();
-                } else if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    const maxIndex = Math.max(0, featureCards.length - visibleCards);
-                    currentIndex = Math.min(currentIndex + 1, maxIndex);
-                    updateCarousel();
-                }
             });
-            
-            // Handle swipe on touch devices
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartTime = 0;
-            
-            featuresCarousel.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartTime = Date.now();
-            }, { passive: true });
-            
-            featuresCarousel.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-            
-            function handleSwipe() {
-                const swipeThreshold = 50;
-                const timeThreshold = 300; // ms
-                const swipeTime = Date.now() - touchStartTime;
-                const swipeDifference = touchStartX - touchEndX;
-                
-                if (Math.abs(swipeDifference) > swipeThreshold && swipeTime < timeThreshold) {
-                    if (swipeDifference > 0) {
-                        // Swipe left - go to next
-                        const maxIndex = Math.max(0, featureCards.length - visibleCards);
-                        currentIndex = Math.min(currentIndex + 1, maxIndex);
-                    } else {
-                        // Swipe right - go to previous
-                        currentIndex = Math.max(0, currentIndex - 1);
-                    }
-                    updateCarousel();
-                }
-            }
-            
-            // Handle scroll events for better UX
-            featuresCarousel.addEventListener('scroll', () => {
-                if (!isScrolling) {
-                    const card = featureCards[0];
-                    const cardWidth = card.offsetWidth + 20; // 20px gap
-                    currentIndex = Math.round(featuresCarousel.scrollLeft / cardWidth);
-                    
-                    // Update active dot
-                    const dots = document.querySelectorAll('.carousel-dot');
-                    const activeDotIndex = Math.floor(currentIndex / visibleCards);
-                    dots.forEach((dot, index) => {
-                        dot.classList.toggle('active', index === activeDotIndex);
-                    });
-                }
-            });
-            
-            // Initialize carousel
-            createDots();
-            updateCarousel();
-            
-            // Update on window resize
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    const newVisibleCards = getVisibleCardsCount();
-                    if (newVisibleCards !== visibleCards) {
-                        visibleCards = newVisibleCards;
-                        createDots();
-                    }
-                    updateCarousel();
-                }, 250);
-            });
-        }
-        
-        // Initialize all functionality when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            initMobileMenu();
-            initSmoothScroll();
-            initFeaturesCarousel();
         });
 
         // Scroll to Top Button
