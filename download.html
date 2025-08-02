@@ -300,7 +300,6 @@
         <h1>Выберите версию для скачивания</h1>
         
         <div class="version-carousel">
-            <button class="carousel-arrow prev">❮</button>
             <div class="version-selector" id="versionCarousel">
                 <div class="version-option" data-version="standard">
                     <h3>Стандартная версия</h3>
@@ -320,15 +319,18 @@
                     <a href="https://drive.google.com/file/d/1zkKo6pi_iL5gx1Yts-zAeYv9RPmDhhOS/view?usp=sharing" class="btn download-btn" target="_blank">Скачать</a>
                 </div>
             </div>
-            <button class="carousel-arrow next">❯</button>
-            
             <div class="carousel-nav" id="carouselDots">
                 <!-- Dots will be added by JavaScript -->
             </div>
         </div>
         
-        <div style="margin-top: 30px;">
-            <a href="index.html" class="btn" style="background: #444; margin-top: 20px;">← Вернуться на главную</a>
+        <div id="waitMessage" style="display: none; margin: 20px 0; padding: 15px; background: rgba(255, 107, 107, 0.2); border-radius: 8px; font-size: 1.1em;">
+            Пожалуйста, подождите 10 секунд, идет подготовка файла...
+            <div id="countdown" style="font-weight: bold; margin-top: 10px;">10</div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="index.html" class="btn" style="background: #444;">← Вернуться на главную</a>
         </div>
     </div>
 
@@ -348,10 +350,37 @@
                 const btn = option.querySelector('.download-btn');
                 const version = option.dataset.version;
                 
+                // Skip if it's the HiSpace version which has a direct link
+                if (version === 'hispace') return;
+                
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    // Redirect to the selected version
-                    window.location.href = versionUrls[version];
+                    
+                    // Show wait message
+                    const waitMessage = document.getElementById('waitMessage');
+                    const countdownElement = document.getElementById('countdown');
+                    waitMessage.style.display = 'block';
+                    
+                    // Start countdown
+                    let secondsLeft = 10;
+                    countdownElement.textContent = secondsLeft;
+                    
+                    const countdown = setInterval(() => {
+                        secondsLeft--;
+                        countdownElement.textContent = secondsLeft;
+                        
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdown);
+                            // Redirect to the selected version
+                            window.location.href = versionUrls[version];
+                        }
+                    }, 1000);
+                    
+                    // Disable all download buttons during countdown
+                    document.querySelectorAll('.download-btn').forEach(btn => {
+                        btn.style.opacity = '0.5';
+                        btn.style.pointerEvents = 'none';
+                    });
                 });
             });
         });
