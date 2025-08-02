@@ -353,7 +353,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: url('data:image/svg+xml;utf8,<svg width="24" height="30" viewBox="0 0 24 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4L4 8V20L12 26L20 20V8L12 4Z" fill="%23ffffff" stroke="%23ffffff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="%23000000"/></svg>'), auto;
         }
 
         body {
@@ -570,7 +569,17 @@
             </button>
             <div class="download-info">Доступны обычная, NoDPI и HiSpace версии</div>
             
-            
+            <div class="wait-message" id="waitMessage">
+                <p style="font-size: 1.2em; margin-bottom: 15px;">⏳ Подготовка к загрузке...</p>
+                <div class="countdown">
+                    <span id="countdown">10</span> сек.
+                </div>
+                <p style="color: rgba(255,255,255,0.7);">Пожалуйста, подождите, файл готовится к загрузке</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
         
         <h2 class="section-title">Что такое модификация?</h2>
         
