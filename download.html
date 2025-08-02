@@ -57,73 +57,12 @@
             text-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
         }
 
-        .version-carousel {
-            position: relative;
-            max-width: 100%;
-            margin: 30px auto;
-            overflow: hidden;
-        }
-        
         .version-selector {
             display: flex;
             gap: 20px;
-            transition: transform 0.5s ease;
-            padding: 10px 0;
-            margin: 0;
-        }
-        
-        .carousel-nav {
-            display: flex;
+            margin: 30px 0;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .carousel-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .carousel-dot.active {
-            background: #ff6b6b;
-            transform: scale(1.2);
-        }
-        
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-        
-        .carousel-arrow:hover {
-            background: rgba(255, 107, 107, 0.8);
-        }
-        
-        .carousel-arrow.prev {
-            left: 10px;
-        }
-        
-        .carousel-arrow.next {
-            right: 10px;
         }
         
         .version-option {
@@ -299,38 +238,22 @@
     <div class="container">
         <h1>Выберите версию для скачивания</h1>
         
-        <div class="version-carousel">
-            <div class="version-selector" id="versionCarousel">
-                <div class="version-option" data-version="standard">
-                    <h3>Стандартная версия</h3>
-                    <p>Полная версия с базовыми возможностями</p>
-                    <button class="btn download-btn" data-version="standard">Скачать</button>
-                </div>
-                
-                <div class="version-option" data-version="nodpi">
-                    <h3>Версия без DPI</h3>
-                    <p>Оптимизирована для устройств с высоким DPI</p>
-                    <button class="btn download-btn" data-version="nodpi">Скачать</button>
-                </div>
-                
-                <div class="version-option" data-version="hispace">
-                    <h3>HiSpace версия</h3>
-                    <p>Специальная версия с улучшенной совместимостью</p>
-                    <a href="https://drive.google.com/file/d/1zkKo6pi_iL5gx1Yts-zAeYv9RPmDhhOS/view?usp=sharing" class="btn download-btn" target="_blank">Скачать</a>
-                </div>
+        <div class="version-selector">
+            <div class="version-option" data-version="regular">
+                <h3>Обычная версия</h3>
+                <p>Рекомендуется для большинства пользователей</p>
+                <button class="btn download-btn" data-version="regular">Скачать обычную версию</button>
             </div>
-            <div class="carousel-nav" id="carouselDots">
-                <!-- Dots will be added by JavaScript -->
+            
+            <div class="version-option" data-version="nodpi">
+                <h3>NoDPI версия</h3>
+                <p>Для пользователей с нестандартным разрешением экрана</p>
+                <button class="btn download-btn" data-version="nodpi">Скачать NoDPI версию</button>
             </div>
         </div>
         
-        <div id="waitMessage" style="display: none; margin: 20px 0; padding: 15px; background: rgba(255, 107, 107, 0.2); border-radius: 8px; font-size: 1.1em;">
-            Пожалуйста, подождите 10 секунд, идет подготовка файла...
-            <div id="countdown" style="font-weight: bold; margin-top: 10px;">10</div>
-        </div>
-        
-        <div style="margin-top: 20px;">
-            <a href="index.html" class="btn" style="background: #444;">← Вернуться на главную</a>
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn" style="background: #444; margin-top: 20px;">← Вернуться на главную</a>
         </div>
     </div>
 
@@ -341,8 +264,7 @@
             // Version URLs
             const versionUrls = {
                 regular: 'https://drive.google.com/file/d/1uM6jhIMQpjbtJiWto3ntyOWNcMyi_aQp/view?usp=sharing',
-                nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing',
-                hispace: 'https://drive.google.com/file/d/1zkKo6pi_iL5gx1Yts-zAeYv9RPmDhhOS/view?usp=sharing'
+                nodpi: 'https://drive.google.com/file/d/1CY_CteqnAA30WX1PkQnzIqMcE6rS-ciN/view?usp=sharing'
             };
             
             // Handle version selection
@@ -350,37 +272,10 @@
                 const btn = option.querySelector('.download-btn');
                 const version = option.dataset.version;
                 
-                // Skip if it's the HiSpace version which has a direct link
-                if (version === 'hispace') return;
-                
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
-                    // Show wait message
-                    const waitMessage = document.getElementById('waitMessage');
-                    const countdownElement = document.getElementById('countdown');
-                    waitMessage.style.display = 'block';
-                    
-                    // Start countdown
-                    let secondsLeft = 10;
-                    countdownElement.textContent = secondsLeft;
-                    
-                    const countdown = setInterval(() => {
-                        secondsLeft--;
-                        countdownElement.textContent = secondsLeft;
-                        
-                        if (secondsLeft <= 0) {
-                            clearInterval(countdown);
-                            // Redirect to the selected version
-                            window.location.href = versionUrls[version];
-                        }
-                    }, 1000);
-                    
-                    // Disable all download buttons during countdown
-                    document.querySelectorAll('.download-btn').forEach(btn => {
-                        btn.style.opacity = '0.5';
-                        btn.style.pointerEvents = 'none';
-                    });
+                    // Redirect to the selected version
+                    window.location.href = versionUrls[version];
                 });
             });
         });
